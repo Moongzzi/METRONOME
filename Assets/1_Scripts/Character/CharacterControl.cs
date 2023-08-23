@@ -19,34 +19,61 @@ namespace MET.Character
         private Vector3 lookDirection = Vector3.forward;
         private Vector3 lastmoving = Vector3.zero;
 
+        public Transform cameraDirection;
+
+        float mouseX = 0;
+        float mouseY = 0;
 
         private void Update()
         {
             float horizontal = Input.GetAxisRaw("Horizontal");
             float vertical = Input.GetAxisRaw("Vertical");
-
-            movement = new Vector3(horizontal, 0f, vertical).normalized;
-
-            if (movement.magnitude > 0f)
+            if (horizontal != 0 || vertical != 0)
             {
-                lookDirection = movement.normalized;
                 isMoving = true;
+                Vector3 offset = (cameraDirection.forward * vertical) + (cameraDirection.right * horizontal);
+                offset.y = 0;
+                CharacterBody.LookAt(CharacterBody.position + offset);
+                CharacterBody.position += CharacterBody.forward * Time.deltaTime * moveSpeed;
             }
-            else
-            {
-                isMoving = false;
-            }
+            else isMoving = false;
+
+            //Vector3 dir = (CharacterBody.forward * vertical) + (CharacterBody.right * horizontal);
+            //dir.y = 0;
+            //Vector3 dir = new Vector3(horizontal, 0, vertical).normalized;
+
+
+            //movement = new Vector3(horizontal, 0f, vertical).normalized;
+
+            //if (movement.magnitude > 0f)
+            //{
+            //    lookDirection = movement.normalized;
+            //    isMoving = true;
+            //}
+            //else
+            //{
+            //    isMoving = false;
+            //}
 
             animator.SetBool("isMoving", isMoving);
-            animator.SetFloat("xDirection", lookDirection.x);
-            animator.SetFloat("zDirection", lookDirection.z);
+            animator.SetFloat("xDirection", vertical);
+            animator.SetFloat("zDirection", horizontal);
 
 
-            if (isMoving && lastmoving != movement)
+            //if (isMoving && lastmoving != movement)
+            //{
+            //    lastmoving = movement;
+            //    StopAllCoroutines();
+            //    StartCoroutine(TurnRightTo(-movement));
+            //}
+
+            if (Input.GetMouseButton(1))
             {
-                lastmoving = movement;
-                StopAllCoroutines();
-                StartCoroutine(TurnRightTo(-movement));
+                mouseX = Input.GetAxis("Mouse X") * 3f;
+                mouseY = Input.GetAxis("Mouse Y") * 3f;
+
+                IngameManager.Instance.followCamera.wide += mouseX;
+                IngameManager.Instance.followCamera.height += mouseY;
             }
         }
 
