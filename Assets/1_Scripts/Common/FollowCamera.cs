@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
 {
+    public Camera mainCam;
+
     public Transform target;
     public Transform cachedTransform;
     public Transform CameraCachedTransform;

@@ -2,6 +2,7 @@ using MET.Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace MET.Character
 {
@@ -24,6 +25,8 @@ namespace MET.Character
         float mouseX = 0;
         float mouseY = 0;
 
+        private InteractionObject _selection;
+
         private void Update()
         {
             float horizontal = Input.GetAxisRaw("Horizontal");
@@ -38,34 +41,9 @@ namespace MET.Character
             }
             else isMoving = false;
 
-            //Vector3 dir = (CharacterBody.forward * vertical) + (CharacterBody.right * horizontal);
-            //dir.y = 0;
-            //Vector3 dir = new Vector3(horizontal, 0, vertical).normalized;
-
-
-            //movement = new Vector3(horizontal, 0f, vertical).normalized;
-
-            //if (movement.magnitude > 0f)
-            //{
-            //    lookDirection = movement.normalized;
-            //    isMoving = true;
-            //}
-            //else
-            //{
-            //    isMoving = false;
-            //}
-
             animator.SetBool("isMoving", isMoving);
-            animator.SetFloat("xDirection", vertical);
-            animator.SetFloat("zDirection", horizontal);
-
-
-            //if (isMoving && lastmoving != movement)
-            //{
-            //    lastmoving = movement;
-            //    StopAllCoroutines();
-            //    StartCoroutine(TurnRightTo(-movement));
-            //}
+            //animator.SetFloat("xDirection", vertical);
+            //animator.SetFloat("zDirection", horizontal);
 
             if (Input.GetMouseButton(1))
             {
@@ -83,7 +61,23 @@ namespace MET.Character
             transform.position = nextPosition;
         }
 
+        private bool IsPointerOverUIObject()
+        {
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            return results.Count > 0;
+        }
 
+        private List<RaycastResult> UIObjectsUnderPointer()
+        {
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            return results;
+        }
         public IEnumerator TurnRightTo(Vector3 to)
         {
             Vector3 Begin = CharacterBody.right;
