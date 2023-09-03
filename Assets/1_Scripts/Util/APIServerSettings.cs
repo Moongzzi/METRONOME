@@ -7,6 +7,7 @@ namespace MET.Util
 {
     [Serializable]
     [ExecuteInEditMode]
+    [CreateAssetMenu(fileName = "APIServerSettings", menuName = "MET")]
     public class APIServerSettings : ScriptableObjectSingleton<APIServerSettings>
     {
         [SerializeField] private string rootURL;

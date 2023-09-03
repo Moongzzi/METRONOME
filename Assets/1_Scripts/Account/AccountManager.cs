@@ -3,6 +3,7 @@ using MET.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace MET.Account
@@ -19,11 +20,11 @@ namespace MET.Account
         public void TryRegister(string id, string pw, string nickName, Action<APIResult, string> callback)
         {
             JSONObject bodyData = new JSONObject();
-            bodyData.AddField("id", id);
-            bodyData.AddField("pw", pw);
-            bodyData.AddField("nickName", nickName);
+            bodyData.AddField("loginId", id);
+            bodyData.AddField("password", pw);
+            bodyData.AddField("name", nickName);
 
-            APIManager.Instance.CallRESTAPI("regist", RESTAPI_TYPE.POST, 
+            APIManager.Instance.CallRESTAPI("/user/registration", RESTAPI_TYPE.POST, 
                 (result, ackData) =>
                 {
                     if(result == APIResult.SUCCESS)
@@ -43,11 +44,16 @@ namespace MET.Account
         /// </summary>
         public void TryLogin(string id, string pw, Action<APIResult, string> callback)
         {
-            JSONObject bodyData = new JSONObject();
-            bodyData.AddField("id", id);
-            bodyData.AddField("pw", pw);
+            //Test
+            callback(APIResult.SUCCESS, "");
+            return;
 
-            APIManager.Instance.CallRESTAPI("login", RESTAPI_TYPE.POST,
+
+            JSONObject bodyData = new JSONObject();
+            bodyData.AddField("loginId", id);
+            bodyData.AddField("password", pw);
+
+            APIManager.Instance.CallRESTAPI("/user/login", RESTAPI_TYPE.POST,
                 (result, ackData) =>
                 {
                     if (result == APIResult.SUCCESS)
