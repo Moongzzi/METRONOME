@@ -1,6 +1,8 @@
+using MET.Account;
 using MET.Common;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,32 +10,64 @@ namespace MET.Title.UI
 {
     public class TitleView : MonoBehaviour
     {
-        public bool IsExitPopupActive
+        public bool IsHoverNewGameButton
         {
-            get => exitPopup.activeSelf;
-            set => exitPopup.SetActive(value);
+            get => buttonHoverObjs[0].activeSelf;
+            set => buttonHoverObjs[0].SetActive(value);
+        }
+        public bool IsHoverLoadGameButton
+        {
+            get => buttonHoverObjs[1].activeSelf;
+            set => buttonHoverObjs[1].SetActive(value);
+        }
+        public bool IsHoverSettingButton
+        {
+            get => buttonHoverObjs[2].activeSelf;
+            set => buttonHoverObjs[2].SetActive(value);
+        }
+        public bool IsHoverExitButton
+        {
+            get => buttonHoverObjs[3].activeSelf;
+            set => buttonHoverObjs[3].SetActive(value);
         }
 
 
-        [Header("Page")]
-        public GameObject buttonGroup;
+        [Header("MainPage")]
+        public GameObject bigLogo;
+        public GameObject pressGuideObj;
 
-        [Header("ButtonGroup")]
-        public Button mainButton;
+        [Header("ButtonPage")]
+        public GameObject buttonPage;
         public Button newGameButton;
         public Button loadGameButton;
         public Button settingButton;
         public Button exitButton;
 
-        [Header("ButtonGroup")]
-        public GameObject exitPopup;
-        public Button[] exitPopupButtons;
+        [Header("ButtonHover")]
+        public GameObject[] buttonHoverObjs;
 
+        [Header("LoginPage")]
+        public GameObject loginPage;
+        public TMP_InputField idField;
+        public TMP_InputField passWordField;
+        public Button loginExitButton;
+        public Button loginButton;
 
         #region Unity Methods
         private void Start()
         {
-            BindEvents();
+            Localization();
+        }
+
+        private void Update()
+        {
+            if(Input.anyKey && pressGuideObj.activeSelf)
+            {
+                bigLogo.SetActive(false);
+                pressGuideObj.SetActive(false);
+
+                buttonPage.SetActive(true);
+            }
         }
         #endregion
 
@@ -41,24 +75,40 @@ namespace MET.Title.UI
         #endregion
 
         #region Private Methods
+        private void Localization()
+        {
+            bigLogo.SetActive(true);
+            pressGuideObj.SetActive(true);
+
+            buttonPage.SetActive(false);
+            loginPage.SetActive(false);
+
+            for(int i = 0; i < buttonHoverObjs.Length; i++)
+            {
+                buttonHoverObjs[i].SetActive(false);
+            }
+
+            idField.text = "";
+            passWordField.text = "";
+
+            BindEvents();
+        }
+
         private void BindEvents()
         {
-            mainButton.onClick.AddListener(() => buttonGroup.SetActive(true));
-
             newGameButton.onClick.AddListener(OnClickNewGameButton);
             loadGameButton.onClick.AddListener(OnClickLoadGameButton);
             settingButton.onClick.AddListener(OnClickSettingButton);
             exitButton.onClick.AddListener(OnClickExitButton);
 
-            exitPopupButtons[0].onClick.AddListener(OnClickExitNo);
-            exitPopupButtons[1].onClick.AddListener(OnClickExitYes);
+            loginExitButton.onClick.AddListener(OnClickExitButton);
+            loginButton.onClick.AddListener(OnClickLogin);
         }
 
 
         // 새게임 버튼을 눌렀을 때 호출되는 함수
         private void OnClickNewGameButton()
         {
-            SceneLoadManager.Instance.LoadScene(1);
         }
 
         // 불러오기 버튼을 눌렀을 때 호출되는 함수
@@ -76,17 +126,41 @@ namespace MET.Title.UI
         // 나가기 버튼을 눌렀을 때 호출되는 함수 
         private void OnClickExitButton()
         {
-            IsExitPopupActive = true;
         }
 
         private void OnClickExitNo()
         {
-            IsExitPopupActive = false;
         }
 
         private void OnClickExitYes()
         {
             Application.Quit();
+        }
+
+        // 로그인 함수
+        private void OnClickLogin()
+        {
+            string idText = idField.text;
+            string pwText = passWordField.text;
+
+            if (string.IsNullOrEmpty(idText) || string.IsNullOrEmpty(pwText))
+            {
+                Debug.Log("ID, PW 입력 요망");
+                return;
+            }
+
+            AccountManager.Instance.TryLogin(idText, pwText, OnClickLoginCallback);
+        }
+
+        private void OnClickLoginCallback(APIResult result, string msg)
+        {
+            if (result == APIResult.SUCCESS)
+            {
+                // 기존 저장 파일 있는지 체크 하여 화면 표출 및 씬 이동
+
+
+                SceneLoadManager.Instance.LoadScene(1);
+            }
         }
         #endregion
     }
