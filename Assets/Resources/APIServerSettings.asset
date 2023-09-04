@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b364656427fd3e94abc38f82e45241f5, type: 3}
   m_Name: APIServerSettings
   m_EditorClassIdentifier: 
-  rootURL: http://58.124.118.126:8080
+  rootURL: http://54.253.163.243:8080

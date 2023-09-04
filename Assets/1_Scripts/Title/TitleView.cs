@@ -3,7 +3,9 @@ using MET.Common;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace MET.Title.UI
@@ -53,6 +55,11 @@ namespace MET.Title.UI
         public Button loginExitButton;
         public Button loginButton;
 
+        [Header("ExitPage")]
+        public GameObject exitPage;
+        public Button exitYesButton;
+        public Button exitNoButton;
+
         #region Unity Methods
         private void Start()
         {
@@ -82,6 +89,7 @@ namespace MET.Title.UI
 
             buttonPage.SetActive(false);
             loginPage.SetActive(false);
+            exitPage.SetActive(false);
 
             for(int i = 0; i < buttonHoverObjs.Length; i++)
             {
@@ -103,18 +111,25 @@ namespace MET.Title.UI
 
             loginExitButton.onClick.AddListener(OnClickExitButton);
             loginButton.onClick.AddListener(OnClickLogin);
+
+            exitYesButton.onClick.AddListener(OnClickExitYes);
+            exitNoButton.onClick.AddListener(OnClickExitNo);
         }
 
 
         // 새게임 버튼을 눌렀을 때 호출되는 함수
         private void OnClickNewGameButton()
         {
+            buttonPage.SetActive(false);
+            loginPage.SetActive(true);
         }
 
         // 불러오기 버튼을 눌렀을 때 호출되는 함수
         private void OnClickLoadGameButton()
         {
             //우선 보류
+            buttonPage.SetActive(false);
+            loginPage.SetActive(true);
         }
 
         // 설정 버튼을 눌렀을 때 호출되는 함수
@@ -126,10 +141,12 @@ namespace MET.Title.UI
         // 나가기 버튼을 눌렀을 때 호출되는 함수 
         private void OnClickExitButton()
         {
+            exitPage.SetActive(true);
         }
 
         private void OnClickExitNo()
         {
+            exitPage.SetActive(false);
         }
 
         private void OnClickExitYes()
