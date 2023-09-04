@@ -45,8 +45,8 @@ namespace MET.Account
         public void TryLogin(string id, string pw, Action<APIResult, string> callback)
         {
             //Test
-            callback(APIResult.SUCCESS, "");
-            return;
+            /*callback(APIResult.SUCCESS, "");
+            return;*/
 
 
             JSONObject bodyData = new JSONObject();
