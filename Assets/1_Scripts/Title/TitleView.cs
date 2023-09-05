@@ -52,6 +52,8 @@ namespace MET.Title.UI
         public GameObject loginPage;
         public TMP_InputField idField;
         public TMP_InputField passWordField;
+        public Button loginBeforeButton;
+        public Button registerButton;
         public Button loginExitButton;
         public Button loginButton;
 
@@ -109,6 +111,12 @@ namespace MET.Title.UI
             settingButton.onClick.AddListener(OnClickSettingButton);
             exitButton.onClick.AddListener(OnClickExitButton);
 
+            loginBeforeButton.onClick.AddListener(() =>
+            {
+                buttonPage.SetActive(true); 
+                loginPage.SetActive(false);
+            });
+            registerButton.onClick.AddListener(OnClickRegister);
             loginExitButton.onClick.AddListener(OnClickExitButton);
             loginButton.onClick.AddListener(OnClickLogin);
 
@@ -178,6 +186,12 @@ namespace MET.Title.UI
 
                 SceneLoadManager.Instance.LoadScene(1);
             }
+        }
+
+        //회원가입 함수
+        private void OnClickRegister()
+        {
+
         }
         #endregion
     }
