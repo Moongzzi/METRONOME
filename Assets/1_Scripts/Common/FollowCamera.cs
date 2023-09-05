@@ -31,7 +31,7 @@ public class FollowCamera : MonoBehaviour
         else if (height <= minH) height = minH + 0.1f;
 
         cachedTransform.position = target.position;
-        cachedTransform.rotation = Quaternion.Euler(height, wide, 0);
+        cachedTransform.rotation = Quaternion.Euler(height * -1f, wide, 0);
 
         CameraCachedTransform.LookAt(target);
     }
