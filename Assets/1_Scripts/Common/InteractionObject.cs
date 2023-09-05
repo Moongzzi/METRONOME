@@ -17,18 +17,23 @@ public class InteractionObject : MonoBehaviour
         outline.OutlineWidth = 0;
     }
 
-    public void OnMouseEnter()
-    {
-        outline.OutlineWidth = saveWidth;
-    }
-
-    public void OnMouseExit()
-    {
-        outline.OutlineWidth = 0;
-    }
-
-    public void OnMouseUp()
+    public void OnTriggerEnter(Collider other)
     {
         Debug.LogError("조사 오브젝트 클릭");
     }
+
+    //public void OnMouseEnter()
+    //{
+    //    outline.OutlineWidth = saveWidth;
+    //}
+
+    //public void OnMouseExit()
+    //{
+    //    outline.OutlineWidth = 0;
+    //}
+
+    //public void OnMouseUp()
+    //{
+    //    Debug.LogError("조사 오브젝트 클릭");
+    //}
 }
